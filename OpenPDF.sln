@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenPDF", "src\OpenPDF\OpenPDF.csproj", "{D195C5FC-CC89-44CD-92DD-79194901308E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenPDF.Tests", "tests\OpenPDF.Tests\OpenPDF.Tests.csproj", "{52085702-8C78-4600-BEBB-7E6DEEFC4238}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D195C5FC-CC89-44CD-92DD-79194901308E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D195C5FC-CC89-44CD-92DD-79194901308E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D195C5FC-CC89-44CD-92DD-79194901308E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D195C5FC-CC89-44CD-92DD-79194901308E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52085702-8C78-4600-BEBB-7E6DEEFC4238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52085702-8C78-4600-BEBB-7E6DEEFC4238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52085702-8C78-4600-BEBB-7E6DEEFC4238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52085702-8C78-4600-BEBB-7E6DEEFC4238}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A7BB6C6-BECC-4545-987B-B70A5CA10303}
+	EndGlobalSection
+EndGlobal
