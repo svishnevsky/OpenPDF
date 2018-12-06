@@ -11,15 +11,16 @@ namespace OpenPDF.Tests
         public async Task ReadVersion()
         {
             const string expected = "1.7";
-            string result;
-            using (var stream = new FileStream("example.pdf", FileMode.Open))
+            using (var stream = new FileStream(
+                "example.pdf", FileMode.Open))
             {
-                var sut = new PdfReader(stream);
+                using (var sut = new PdfReader(stream))
+                {
+                    var result = await sut.ReadVersion();
 
-                result = await sut.ReadVersion();
+                    Assert.AreEqual(expected, result);
+                }
             }
-
-            Assert.AreEqual(expected, result);
         }
     }
 }

@@ -1,24 +1,52 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace OpenPDF
 {
-    public class PdfReader
+    public class PdfReader : IDisposable
     {
         private static readonly int versionPrefixLength = "%PDF-".Length;
-        private readonly Stream stream;
+        private readonly StreamReader reader;
+        private bool disposed = false;
 
         public PdfReader(Stream stream)
         {
-            this.stream = stream;
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            this.reader = new StreamReader(stream);
         }
 
         public async Task<string> ReadVersion()
         {
-            using (var reader = new StreamReader(this.stream))
+            EnsureNotDisposed();
+            var versionLine = await reader.ReadLineAsync();
+            return versionLine.Substring(versionPrefixLength);
+        }
+
+        private void EnsureNotDisposed()
+        {
+            if (this.disposed)
             {
-                var versionLine = await reader.ReadLineAsync();
-                return versionLine.Substring(versionPrefixLength);
+                throw new ObjectDisposedException(nameof(this.reader));
+            }
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && !this.disposed && this.reader != null)
+            {
+                this.reader.Dispose();
+                this.disposed = true;
             }
         }
     }
