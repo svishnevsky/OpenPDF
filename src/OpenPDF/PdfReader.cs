@@ -46,7 +46,7 @@ namespace OpenPDF
                 var objectDefinition = currentLine.Split(' ');
                 var objectContent = new List<string>();
                 while((currentLine = this.reader.ReadLine())
-                    != "endobj")
+                    != PdfTags.EndObj)
                 {
                     objectContent.Add(currentLine);
                 }
@@ -62,20 +62,34 @@ namespace OpenPDF
 
         private string FindNextObjectDefinition()
         {
+            var previousPosition = this.reader.BaseStream.Position;
             string currentLine = this.reader.ReadLine();
-            while (!this.reader.EndOfStream && !IsObjectDefinition(currentLine))
+            while (!this.reader.EndOfStream)
             {
+                if (IsObjectDefinition(currentLine))
+                {
+                    return currentLine;
+                }
+
+                if (PdfTags.Xref.Equals(currentLine) ||
+                    PdfTags.Trailer.Equals(currentLine))
+                {
+                    this.reader.BaseStream.Seek(
+                        previousPosition, SeekOrigin.Begin);
+                    return null;
+                }
+
+                previousPosition = this.reader.BaseStream.Position;
                 currentLine = this.reader.ReadLine();
             }
 
-            return IsObjectDefinition(currentLine)
-                ? currentLine
-                : null;
+            return null;
         }
 
         private static bool IsObjectDefinition(string currentLine)
         {
-            return !currentLine.StartsWith("%") && currentLine.EndsWith("obj");
+            return !currentLine.StartsWith("%") && 
+                currentLine.EndsWith(PdfTags.Obj);
         }
 
         private void SeekToStart()
