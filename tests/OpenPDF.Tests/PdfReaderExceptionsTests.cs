@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OpenPDF.Tests
@@ -38,6 +39,18 @@ namespace OpenPDF.Tests
                 var sut = new PdfReader(stream);
                 sut.Dispose();
                 await sut.ReadVersion();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void ReadObjectsException()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var sut = new PdfReader(stream);
+                sut.Dispose();
+                sut.ReadObjects().Any();
             }
         }
     }
