@@ -6,7 +6,7 @@ namespace OpenPDF
 {
     public class PdfReader : IDisposable
     {
-        private static readonly int versionPrefixLength = "%PDF-".Length;
+        private const string versionPrefix = "%PDF-";
         private readonly StreamReader reader;
         private bool disposed = false;
 
@@ -23,8 +23,15 @@ namespace OpenPDF
         public async Task<string> ReadVersion()
         {
             EnsureNotDisposed();
-            var versionLine = await reader.ReadLineAsync();
-            return versionLine.Substring(versionPrefixLength);
+            this.reader.BaseStream.Seek(0, SeekOrigin.Begin);
+            var versionLine = await this.reader.ReadLineAsync();
+            if (!versionLine.StartsWith(versionPrefix))
+            {
+                throw new InvalidDataException(
+                    ErrorMessages.InvalidStreamFormat);
+            }
+
+            return versionLine.Substring(versionPrefix.Length);
         }
 
         private void EnsureNotDisposed()
@@ -43,7 +50,7 @@ namespace OpenPDF
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && !this.disposed && this.reader != null)
+            if (disposing && !this.disposed)
             {
                 this.reader.Dispose();
                 this.disposed = true;
