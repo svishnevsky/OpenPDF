@@ -1,7 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OpenPDF.Tests
 {
@@ -23,26 +23,42 @@ namespace OpenPDF.Tests
         }
 
         [TestMethod]
-        public async Task ReadVersion()
+        public void ReadVersion()
         {
-            const string expected = "1.7";
+            const string Expected = "1.7";
             using (var sut = new PdfReader(this.fileStream))
             {
-                var result = await sut.ReadVersion();
+                string result = sut.ReadVersion();
 
-                Assert.AreEqual(expected, result);
+                Assert.AreEqual(Expected, result);
             }
         }
 
         [TestMethod]
         public void ReadRawObjects()
         {
-            const int expected = 20;
+            const int Expected = 20;
             using (var sut = new PdfReader(this.fileStream))
             {
-                var result = sut.ReadObjects();
+                IEnumerable<PdfObject> result = sut.ReadObjects();
 
-                Assert.AreEqual(expected, result.Count());
+                Assert.AreEqual(Expected, result.Count());
+            }
+        }
+
+        [TestMethod]
+        public void ReadTrailer()
+        {
+            var expected = new PdfTrailer(
+                91785,
+                21,
+                new PdfReference(1, 0),
+                new PdfReference(20, 0));
+            using (var sut = new PdfReader(this.fileStream))
+            {
+                PdfTrailer result = sut.ReadTrailer();
+
+                Assert.AreEqual(expected, result);
             }
         }
     }

@@ -61,6 +61,15 @@ namespace OpenPDF {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reference has incorrect format. This should be &quot;&lt;number:int&gt; &lt;generation:int&gt; R&quot;..
+        /// </summary>
+        internal static string InvalidReferenceFormat {
+            get {
+                return ResourceManager.GetString("InvalidReferenceFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The input stream isn&apos;t valid PDF..
         /// </summary>
         internal static string InvalidStreamFormat {

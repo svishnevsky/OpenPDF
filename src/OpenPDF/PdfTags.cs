@@ -9,5 +9,9 @@
         public const string Xref = "xref";
 
         public const string Trailer = "trailer";
+
+        public const string Eof = "%%EOF";
+
+        public const string VersionPrefix = "%PDF-";
     }
 }

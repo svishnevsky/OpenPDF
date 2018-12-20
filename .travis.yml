@@ -1,0 +1,9 @@
+language: csharp
+mono: none
+dotnet: 2.1
+solution: OpenPDF.sln
+install:
+  dotnet restore OpenPDF.sln
+script:
+  dotnet build OpenPDF.sln
+  dotnet test tests/OpenPDF.Tests.csproj --no-build
