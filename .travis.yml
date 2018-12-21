@@ -16,7 +16,7 @@ install:
 script:
   - dotnet build OpenPDF.sln
   - dotnet test tests/OpenPDF.Tests/OpenPDF.Tests.csproj --no-build --logger:trx
-  - sonar-scanner -Dsonar.branch.name=$TRAVIS_BRANCH
+  - sonar-scanner
 cache:
   directories:
     - '$HOME/.sonar/cache'
