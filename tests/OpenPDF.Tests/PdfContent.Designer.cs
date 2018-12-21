@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenPDF {
+namespace OpenPDF.Tests {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace OpenPDF {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorMessages {
+    internal class PdfContent {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ErrorMessages() {
+        internal PdfContent() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace OpenPDF {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenPDF.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenPDF.Tests.PdfContent", typeof(PdfContent).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,14 @@ namespace OpenPDF {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Pdf object reference is invalid..
+        ///   Looks up a localized string similar to &lt;&lt;
+        ////Pages 2 0 R
+        ////Type /Catalog
+        ///&gt;&gt;.
         /// </summary>
-        internal static string InvalidObjectReference {
+        internal static string CatalogObject {
             get {
-                return ResourceManager.GetString("InvalidObjectReference", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The reference has incorrect format. This should be &quot;&lt;number:int&gt; &lt;generation:int&gt; R&quot;..
-        /// </summary>
-        internal static string InvalidReferenceFormat {
-            get {
-                return ResourceManager.GetString("InvalidReferenceFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The input stream isn&apos;t valid PDF..
-        /// </summary>
-        internal static string InvalidStreamFormat {
-            get {
-                return ResourceManager.GetString("InvalidStreamFormat", resourceCulture);
+                return ResourceManager.GetString("CatalogObject", resourceCulture);
             }
         }
     }

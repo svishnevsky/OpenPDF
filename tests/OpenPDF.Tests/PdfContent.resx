@@ -117,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InvalidObjectReference" xml:space="preserve">
-    <value>The Pdf object reference is invalid.</value>
-  </data>
-  <data name="InvalidReferenceFormat" xml:space="preserve">
-    <value>The reference has incorrect format. This should be "&lt;number:int&gt; &lt;generation:int&gt; R".</value>
-  </data>
-  <data name="InvalidStreamFormat" xml:space="preserve">
-    <value>The input stream isn't valid PDF.</value>
+  <data name="CatalogObject" xml:space="preserve">
+    <value>&lt;&lt;
+/Pages 2 0 R
+/Type /Catalog
+&gt;&gt;</value>
   </data>
 </root>
