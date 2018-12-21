@@ -64,5 +64,17 @@ namespace OpenPDF.Tests
                 sut.ReadTrailer();
             }
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void ReadCrossReferenceException()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var sut = new PdfReader(stream);
+                sut.Dispose();
+                sut.ReadCrossReference();
+            }
+        }
     }
 }

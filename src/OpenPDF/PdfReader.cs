@@ -7,6 +7,7 @@ namespace OpenPDF
 {
     public class PdfReader : IDisposable
     {
+        private PdfTrailer pdfTrailer;
         private readonly FileStreamReader reader;
         private bool disposed = false;
 
@@ -35,7 +36,15 @@ namespace OpenPDF
         public PdfTrailer ReadTrailer()
         {
             this.EnsureNotDisposed();
-            return new TrailerReader().Read(this.reader);
+            return this.pdfTrailer = new TrailerReader().Read(this.reader);
+        }
+
+        public PdfCrossReferenceTable ReadCrossReference()
+        {
+            this.EnsureNotDisposed();
+            PdfTrailer trailer = this.pdfTrailer ?? this.ReadTrailer();
+            return new CrossReferenceTableReader()
+                .Read(this.reader, trailer.XrefSeek);
         }
 
         public void Dispose()
