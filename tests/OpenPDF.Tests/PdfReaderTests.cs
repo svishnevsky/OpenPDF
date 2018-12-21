@@ -61,5 +61,44 @@ namespace OpenPDF.Tests
                 Assert.AreEqual(expected, result);
             }
         }
+
+        [TestMethod]
+        public void ReadCrossReference()
+        {
+            PdfCrossReferenceTable expected = GetReferencesTable();
+            using (var sut = new PdfReader(this.fileStream))
+            {
+                PdfCrossReferenceTable result = sut.ReadCrossReference();
+
+                Assert.AreEqual(expected, result);
+            }
+        }
+
+        private static PdfCrossReferenceTable GetReferencesTable()
+        {
+            var expected = new PdfCrossReferenceTable();
+            expected.Add(new PdfCrossReference(0, 0, 65535, false));
+            expected.Add(new PdfCrossReference(1, 91519, 0, true));
+            expected.Add(new PdfCrossReference(2, 91460, 0, true));
+            expected.Add(new PdfCrossReference(3, 91284, 0, true));
+            expected.Add(new PdfCrossReference(4, 9, 0, true));
+            expected.Add(new PdfCrossReference(5, 1572, 0, true));
+            expected.Add(new PdfCrossReference(6, 3190, 0, true));
+            expected.Add(new PdfCrossReference(7, 4795, 0, true));
+            expected.Add(new PdfCrossReference(8, 31554, 0, true));
+            expected.Add(new PdfCrossReference(9, 33833, 0, true));
+            expected.Add(new PdfCrossReference(10, 37864, 0, true));
+            expected.Add(new PdfCrossReference(11, 40518, 0, true));
+            expected.Add(new PdfCrossReference(12, 44592, 0, true));
+            expected.Add(new PdfCrossReference(13, 47203, 0, true));
+            expected.Add(new PdfCrossReference(14, 49703, 0, true));
+            expected.Add(new PdfCrossReference(15, 52223, 0, true));
+            expected.Add(new PdfCrossReference(16, 56756, 0, true));
+            expected.Add(new PdfCrossReference(17, 83105, 0, true));
+            expected.Add(new PdfCrossReference(18, 84644, 0, true));
+            expected.Add(new PdfCrossReference(19, 91069, 0, true));
+            expected.Add(new PdfCrossReference(20, 91568, 0, true));
+            return expected;
+        }
     }
 }

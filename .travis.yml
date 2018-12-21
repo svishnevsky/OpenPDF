@@ -1,9 +1,22 @@
+dist: trusty
+branches:
+  only:
+    - master
+    - release
+    - develop
 language: csharp
 mono: none
 dotnet: 2.1
+addons:
+  sonarcloud:
+    organization: svishnevsky-github
 solution: OpenPDF.sln
 install:
   dotnet restore OpenPDF.sln
 script:
-  dotnet build OpenPDF.sln
-  dotnet test tests/OpenPDF.Tests.csproj --no-build
+  - dotnet build OpenPDF.sln
+  - dotnet test tests/OpenPDF.Tests/OpenPDF.Tests.csproj --no-build --logger:trx
+  - sonar-scanner
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
