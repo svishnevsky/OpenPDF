@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using OpenPDF.Readers;
 
@@ -8,6 +7,7 @@ namespace OpenPDF
     public class PdfReader : IDisposable
     {
         private PdfTrailer pdfTrailer;
+        private ObjectReader objectReader;
         private readonly FileStreamReader reader;
         private bool disposed = false;
 
@@ -21,16 +21,19 @@ namespace OpenPDF
             this.reader = new FileStreamReader(stream);
         }
 
+        internal ObjectReader ObjectReader => this.objectReader 
+            ?? (this.objectReader = new ObjectReader(this.reader));
+
         public string ReadVersion()
         {
             this.EnsureNotDisposed();
             return new VersionReader().Read(this.reader);
         }
 
-        public IEnumerable<PdfObject> ReadObjects()
+        public PdfObject ReadObject(PdfCrossReference reference)
         {
             this.EnsureNotDisposed();
-            return new ObjectReader().Read(this.reader);
+            return this.ObjectReader.Read(reference);
         }
 
         public PdfTrailer ReadTrailer()

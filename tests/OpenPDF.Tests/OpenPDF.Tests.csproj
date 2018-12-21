@@ -26,4 +26,19 @@
     <ProjectReference Include="..\..\src\OpenPDF\OpenPDF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="PdfContent.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PdfContent.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="PdfContent.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfContent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

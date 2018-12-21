@@ -1,7 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace OpenPDF.Tests
 {
@@ -35,14 +33,14 @@ namespace OpenPDF.Tests
         }
 
         [TestMethod]
-        public void ReadRawObjects()
+        public void ReadObject()
         {
-            const int Expected = 20;
+            var expected = new PdfObject(1, 0, PdfContent.CatalogObject);
+            var reference = new PdfCrossReference(1, 91519, 0, true);
             using (var sut = new PdfReader(this.fileStream))
             {
-                IEnumerable<PdfObject> result = sut.ReadObjects();
-
-                Assert.AreEqual(Expected, result.Count());
+                PdfObject result = sut.ReadObject(reference);
+                Assert.AreEqual(expected, result);
             }
         }
 

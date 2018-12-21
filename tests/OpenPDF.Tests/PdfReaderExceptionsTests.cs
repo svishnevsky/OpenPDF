@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace OpenPDF.Tests
 {
@@ -43,13 +42,13 @@ namespace OpenPDF.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ObjectDisposedException))]
-        public void ReadObjectsException()
+        public void ReadObjectException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                sut.ReadObjects().Any();
+                sut.ReadObject(null);
             }
         }
 
@@ -74,6 +73,20 @@ namespace OpenPDF.Tests
                 var sut = new PdfReader(stream);
                 sut.Dispose();
                 sut.ReadCrossReference();
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidReferenceException))]
+        public void ReadObjectInvalidReference()
+        {
+            using (var fileStream =
+                new FileStream("example.pdf", FileMode.Open))
+            {
+                using (var reader = new PdfReader(fileStream))
+                {
+                    reader.ReadObject(new PdfCrossReference(1, 845, 0, true));
+                }
             }
         }
     }

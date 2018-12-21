@@ -1,63 +1,44 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Text;
 
 namespace OpenPDF.Readers
 {
     internal class ObjectReader
     {
-        public IEnumerable<PdfObject> Read(FileStreamReader reader)
+        private readonly FileStreamReader reader;
+
+        public ObjectReader(FileStreamReader reader)
         {
-            reader.SeekToStart();
-            string currentLine;
-            while ((currentLine = FindNextObjectDefinition(reader))
-                    != null)
-            {
-                string[] objectDefinition = currentLine.Split(' ');
-                var objectContent = new List<string>();
-                while ((currentLine = reader.ReadLine())
-                    != PdfTags.EndObj)
-                {
-                    objectContent.Add(currentLine);
-                }
-
-                yield return new PdfObject(
-                    int.Parse(objectDefinition[0]),
-                    int.Parse(objectDefinition[1]),
-                    objectContent);
-            }
-
-            yield break;
+            this.reader = reader;
         }
 
-        private static string FindNextObjectDefinition(FileStreamReader reader)
+        public PdfObject Read(PdfCrossReference reference)
         {
-            long previousPosition = reader.Position;
-            string currentLine = reader.ReadLine();
-            while (!reader.EndOfStream)
+            this.reader.Seek(reference.Seek + 1, SeekOrigin.Begin);
+            if (!IsExpectedObject(this.reader.ReadLine(), reference))
             {
-                if (IsObjectDefinition(currentLine))
-                {
-                    return currentLine;
-                }
-
-                if (PdfTags.Xref.Equals(currentLine) ||
-                    PdfTags.Trailer.Equals(currentLine))
-                {
-                    reader.Seek(previousPosition, SeekOrigin.Begin);
-                    return null;
-                }
-
-                previousPosition = reader.Position;
-                currentLine = reader.ReadLine();
+                throw new InvalidReferenceException(reference);
             }
 
-            return null;
+            string currentLine = this.reader.ReadLine();
+            var content = new StringBuilder();
+            while (currentLine != "endobj")
+            {
+                content.AppendLine(currentLine);
+                currentLine = this.reader.ReadLine();
+            }
+
+            return new PdfObject(
+                reference.Number,
+                reference.Generation,
+                content.ToString().Trim());
         }
 
-        private static bool IsObjectDefinition(string currentLine)
+        private static bool IsExpectedObject(
+            string definition, PdfCrossReference reference)
         {
-            return !currentLine.StartsWith("%") &&
-                currentLine.EndsWith(PdfTags.Obj);
+            return definition.Equals(
+                $"{reference.Number} {reference.Generation} obj");
         }
     }
 }
