@@ -14,9 +14,9 @@ solution: OpenPDF.sln
 install:
   dotnet restore OpenPDF.sln
 script:
-  - sonar-scanner
   - dotnet build OpenPDF.sln
-  - dotnet test tests/OpenPDF.Tests.csproj --no-build --logger:trx
+  - dotnet test tests/OpenPDF.Tests/OpenPDF.Tests.csproj --no-build --logger:trx
+  - sonar-scanner -Dsonar.branch.name=$TRAVIS_BRANCH
 cache:
   directories:
     - '$HOME/.sonar/cache'
