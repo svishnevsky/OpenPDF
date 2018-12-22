@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenPDF.Tests
@@ -61,6 +62,13 @@ namespace OpenPDF.Tests
                             reader.ReadLine());
                 }
             }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NullStream()
+        {
+            var sut = new FileStreamReader(null);
         }
     }
 }

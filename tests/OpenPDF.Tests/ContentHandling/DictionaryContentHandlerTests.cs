@@ -26,7 +26,20 @@ namespace OpenPDF.Tests.ContentHandling
         [TestMethod]
         public void HandleDictionary()
         {
-            var expected = new DictionaryPdfObjectContent(
+            DictionaryPdfObjectContent expected = GetExpectedDictionary();
+            var sut = new DictionaryContentHandler(
+                null,
+                new DefaultContentHandler());
+
+            PdfObjectContent result = sut.Handle(
+                PdfContent.Dictionary);
+
+            Assert.AreEqual(expected, result);
+        }
+
+        private static DictionaryPdfObjectContent GetExpectedDictionary()
+        {
+            return new DictionaryPdfObjectContent(
                 new Dictionary<string, PdfObjectContent>
                 {
                     {
@@ -35,18 +48,36 @@ namespace OpenPDF.Tests.ContentHandling
                             new PdfReference(2, 0))
                     },
                     {
-                        "Type",
-                        new TypePdfObjectContent("Catalog")
+                        "Type", new TypePdfObjectContent("Catalog")
+                    },
+                    {
+                        "Text", new StringPdfObjectContent("some text")
+                    },
+                    {
+                        "Dict", new DictionaryPdfObjectContent(
+                            new Dictionary<string, PdfObjectContent>
+                            {
+                                {
+                                    "Type",
+                                    new TypePdfObjectContent("DictType")
+                                },
+                                {
+                                    "Dict", new DictionaryPdfObjectContent(
+                                        new Dictionary<string, PdfObjectContent>
+                                        {
+                                            {
+                                                "Dict", new DictionaryPdfObjectContent(
+                                                    new Dictionary<string, PdfObjectContent>())
+                                            }
+                                        })
+                                },
+                                {
+                                    "Dict1", new DictionaryPdfObjectContent(
+                                        new Dictionary<string, PdfObjectContent>())
+                                }
+                            })
                     }
                 });
-            var sut = new DictionaryContentHandler(
-                null, 
-                new DefaultContentHandler());
-
-            PdfObjectContent result = sut.Handle(
-                PdfContent.CatalogObject);
-
-            Assert.AreEqual(expected, result);
         }
     }
 }

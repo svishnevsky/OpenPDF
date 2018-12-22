@@ -43,11 +43,6 @@ namespace OpenPDF.Readers
             while (currentLine != PdfTags.DictionaryStart)
             {
                 var propBuilder = new StringBuilder(currentLine);
-                while (!currentLine.StartsWith("/"))
-                {
-                    propBuilder.Insert(0, currentLine);
-                }
-
                 propBuilder.Remove(0, 1);
                 string rawProp = propBuilder.ToString();
                 int spaceIndex = rawProp.IndexOf(' ');

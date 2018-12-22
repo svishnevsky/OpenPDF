@@ -19,7 +19,8 @@
                                 new ReferenceContentHandler(null)),
                             null);
                     chain = new BoolContentHandler(
-                        dictionaryHandler);
+                        new StringContentHandler(
+                            dictionaryHandler));
                     dictionaryHandler.PropHandler = chain;
                 }
 

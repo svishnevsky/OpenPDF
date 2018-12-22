@@ -71,5 +71,27 @@ namespace OpenPDF.Tests {
                 return ResourceManager.GetString("CatalogObject", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;&lt;
+        ///    /Pages 2 0 R
+        ///    /Type /Catalog
+        ///    /Text (some text)
+        ///    /Dict &lt;&lt;
+        ///            /Type /DictType
+        ///            /Dict &lt;&lt;
+        ///                    /Dict &lt;&lt;
+        ///                    &gt;&gt;
+        ///            &gt;&gt;
+        ///            /Dict1 &lt;&lt;
+        ///            &gt;&gt;
+        ///    &gt;&gt;
+        ///&gt;&gt;.
+        /// </summary>
+        internal static string Dictionary {
+            get {
+                return ResourceManager.GetString("Dictionary", resourceCulture);
+            }
+        }
     }
 }

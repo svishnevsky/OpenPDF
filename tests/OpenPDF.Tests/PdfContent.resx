@@ -123,4 +123,20 @@
 /Type /Catalog
 &gt;&gt;</value>
   </data>
+  <data name="Dictionary" xml:space="preserve">
+    <value>&lt;&lt;
+    /Pages 2 0 R
+    /Type /Catalog
+    /Text (some text)
+    /Dict &lt;&lt;
+            /Type /DictType
+            /Dict &lt;&lt;
+                    /Dict &lt;&lt;
+                    &gt;&gt;
+            &gt;&gt;
+            /Dict1 &lt;&lt;
+            &gt;&gt;
+    &gt;&gt;
+&gt;&gt;</value>
+  </data>
 </root>
