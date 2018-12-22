@@ -16,7 +16,7 @@
                 return this.Parse(content);
             }
 
-            return this.successor?.Parse(content);
+            return this.successor?.Handle(content);
         }
 
         protected abstract PdfObjectContent Parse(string content);
