@@ -31,7 +31,7 @@ namespace OpenPDF.Readers
             FileStreamReader reader)
         {
             string currentLine = null;
-            while (currentLine != ">>")
+            while (currentLine != PdfTags.DictionaryEnd)
             {
                 currentLine = reader.ReadLine(
                     ReadDirection.BottomToTop);
@@ -40,7 +40,7 @@ namespace OpenPDF.Readers
             currentLine = reader.ReadLine(
                     ReadDirection.BottomToTop);
             var properties = new Dictionary<string, string>();
-            while (currentLine != "<<")
+            while (currentLine != PdfTags.DictionaryStart)
             {
                 var propBuilder = new StringBuilder(currentLine);
                 while (!currentLine.StartsWith("/"))

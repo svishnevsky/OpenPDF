@@ -13,5 +13,9 @@
         public const string Eof = "%%EOF";
 
         public const string VersionPrefix = "%PDF-";
+
+        public const string DictionaryStart = "<<";
+
+        public const string DictionaryEnd = ">>";
     }
 }

@@ -35,7 +35,7 @@ namespace OpenPDF.Tests
         [TestMethod]
         public void ReadObject()
         {
-            var expected = new PdfObject(1, 0, PdfContent.CatalogObject);
+            var expected = new PdfObject(1, 0, new PdfObjectContent());
             var reference = new PdfCrossReference(1, 91519, 0, true);
             using (var sut = new PdfReader(this.fileStream))
             {

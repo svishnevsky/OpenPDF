@@ -31,7 +31,7 @@ namespace OpenPDF.Readers
             return new PdfObject(
                 reference.Number,
                 reference.Generation,
-                content.ToString().Trim());
+                new PdfObjectContent());
         }
 
         private static bool IsExpectedObject(
