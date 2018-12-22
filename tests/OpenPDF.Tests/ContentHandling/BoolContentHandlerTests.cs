@@ -8,7 +8,7 @@ namespace OpenPDF.Tests.ContentHandling
     {
         [DataTestMethod]
         [DataRow("value")]
-        public void NotBoolValue(string input)
+        public void HandleNonBoolContent(string input)
         {
             var sut = new BoolContentHandler(null);
 
@@ -20,7 +20,7 @@ namespace OpenPDF.Tests.ContentHandling
         [DataTestMethod]
         [DataRow("true", true)]
         [DataRow("false", false)]
-        public void BoolValue(string input, bool expectedValue)
+        public void HandleBoolContent(string input, bool expectedValue)
         {
             var expected = new BoolPdfObjectContent(expectedValue);
             var sut = new BoolContentHandler(null);

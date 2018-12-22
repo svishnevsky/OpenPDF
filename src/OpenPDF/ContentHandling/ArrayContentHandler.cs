@@ -2,34 +2,32 @@
 
 namespace OpenPDF.ContentHandling
 {
-    public class DictionaryContentHandler : ComplexContentBaseHandler
+    public class ArrayContentHandler : ComplexContentBaseHandler
     {
-        public DictionaryContentHandler(
+        public ArrayContentHandler(
             ObjectContentHandler successor,
             ObjectContentHandler propHandler)
             : base(
                   successor,
                   propHandler,
-                  PdfTags.DictionaryStart,
-                  PdfTags.DictionaryEnd,
-                  "/")
+                  PdfTags.ArrayStart,
+                  PdfTags.ArrayEnd,
+                  " ")
         {
         }
 
         protected override PdfObjectContent Parse(string content)
         {
             content = this.Unwrap(content);
-            var props = new Dictionary<string, PdfObjectContent>();
+            var items = new List<PdfObjectContent>();
             while (!string.IsNullOrEmpty(content))
             {
-                string prop = content.Substring(1, content.IndexOf(' ') - 1);
-                content = content.Substring(prop.Length + 2);
                 string value = this.GetValue(content);
                 content = content.Substring(value.Length).TrimStart();
-                props.Add(prop, this.PropHandler.Handle(value.Trim()));
+                items.Add(this.PropHandler.Handle(value.Trim()));
             }
 
-            return new DictionaryPdfObjectContent(props);
+            return new ArrayPdfObjectContent(items.ToArray());
         }
     }
 }

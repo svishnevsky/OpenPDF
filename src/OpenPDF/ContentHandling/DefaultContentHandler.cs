@@ -14,14 +14,21 @@
             {
                 if (chain == null)
                 {
-                    var dictionaryHandler = new DictionaryContentHandler(
-                            new TypeContentHandler(
-                                new ReferenceContentHandler(null)),
+                    var arrayHandler = new ArrayContentHandler(
+                            new LongContentHandler(
+                                new FloatContentHandler(null)),
                             null);
-                    chain = new BoolContentHandler(
-                        new StringContentHandler(
-                            dictionaryHandler));
+                    var dictionaryHandler = new DictionaryContentHandler(
+                            arrayHandler,
+                            null);
+                    chain = new NullContentHandler(
+                        new BoolContentHandler(
+                            new StringContentHandler(
+                                new TypeContentHandler(
+                                    new ReferenceContentHandler(
+                                        dictionaryHandler)))));
                     dictionaryHandler.PropHandler = chain;
+                    arrayHandler.PropHandler = chain;
                 }
 
                 return chain;

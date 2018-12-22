@@ -21,7 +21,7 @@ namespace OpenPDF.Tests.ContentHandling
         }
 
         [TestMethod]
-        public void HandleTypeContent()
+        public void HandleStringContent()
         {
             const string Value = "some string";
             var expected = new StringPdfObjectContent(Value);

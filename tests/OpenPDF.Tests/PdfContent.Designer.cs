@@ -78,7 +78,7 @@ namespace OpenPDF.Tests {
         ///    /Type /Catalog
         ///    /Text (some text)
         ///    /Dict &lt;&lt;
-        ///            /Type /DictType
+        ///            /Array [true (str)]
         ///            /Dict &lt;&lt;
         ///                    /Dict &lt;&lt;
         ///                    &gt;&gt;

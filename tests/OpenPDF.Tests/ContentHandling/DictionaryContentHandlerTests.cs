@@ -54,28 +54,39 @@ namespace OpenPDF.Tests.ContentHandling
                         "Text", new StringPdfObjectContent("some text")
                     },
                     {
+                        "Dict",
+                        GetExpectedInnerDIctionary()
+                    }
+                });
+        }
+
+        private static PdfObjectContent GetExpectedInnerDIctionary()
+        {
+            return new DictionaryPdfObjectContent(
+                new Dictionary<string, PdfObjectContent>
+                {
+                    {
+                        "Array",
+                        new ArrayPdfObjectContent(
+                            new PdfObjectContent[]
+                            {
+                                new BoolPdfObjectContent(true),
+                                new StringPdfObjectContent("str")
+                            })
+                    },
+                    {
                         "Dict", new DictionaryPdfObjectContent(
                             new Dictionary<string, PdfObjectContent>
                             {
                                 {
-                                    "Type",
-                                    new TypePdfObjectContent("DictType")
-                                },
-                                {
                                     "Dict", new DictionaryPdfObjectContent(
-                                        new Dictionary<string, PdfObjectContent>
-                                        {
-                                            {
-                                                "Dict", new DictionaryPdfObjectContent(
-                                                    new Dictionary<string, PdfObjectContent>())
-                                            }
-                                        })
-                                },
-                                {
-                                    "Dict1", new DictionaryPdfObjectContent(
                                         new Dictionary<string, PdfObjectContent>())
                                 }
                             })
+                    },
+                    {
+                        "Dict1", new DictionaryPdfObjectContent(
+                            new Dictionary<string, PdfObjectContent>())
                     }
                 });
         }

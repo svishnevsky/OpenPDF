@@ -25,7 +25,9 @@ namespace OpenPDF.ContentHandling
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return -600369533 +
+                   EqualityComparer<Dictionary<string, PdfObjectContent>>
+                       .Default.GetHashCode(this.Value);
         }
     }
 }

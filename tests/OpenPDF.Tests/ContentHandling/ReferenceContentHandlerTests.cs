@@ -12,7 +12,7 @@ namespace OpenPDF.Tests.ContentHandling
         [DataRow("2 1")]
         [DataRow("2 1 T")]
         [DataRow("some text")]
-        public void HandleNonTypeContent(string input)
+        public void HandleNonReferenceContent(string input)
         {
             var sut = new ReferenceContentHandler(null);
 
@@ -22,7 +22,7 @@ namespace OpenPDF.Tests.ContentHandling
         }
 
         [TestMethod]
-        public void HandleTypeContent()
+        public void HandleReferenceContent()
         {
             var expected = new ReferencePdfObjectContent(
                 new PdfReference(2, 1));
