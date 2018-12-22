@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using OpenPDF.ContentHandling;
 using OpenPDF.Readers;
 
 namespace OpenPDF
@@ -22,7 +23,9 @@ namespace OpenPDF
         }
 
         internal ObjectReader ObjectReader => this.objectReader 
-            ?? (this.objectReader = new ObjectReader(this.reader));
+            ?? (this.objectReader = new ObjectReader(
+                this.reader,
+                new DefaultContentHandler()));
 
         public string ReadVersion()
         {

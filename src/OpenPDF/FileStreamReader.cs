@@ -16,7 +16,8 @@ namespace OpenPDF
 
         public FileStreamReader(Stream stream)
         {
-            this.stream = stream;
+            this.stream = stream 
+                ?? throw new ArgumentNullException(nameof(stream));
         }
 
         public string ReadLine(ReadDirection direction = ReadDirection.TopToBottom)
@@ -52,7 +53,7 @@ namespace OpenPDF
         {
             if (disposing && !this.disposed)
             {
-                this.stream?.Dispose();
+                this.stream.Dispose();
                 this.disposed = true;
             }
         }

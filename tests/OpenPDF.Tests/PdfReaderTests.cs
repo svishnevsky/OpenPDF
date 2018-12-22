@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
 using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenPDF.ContentHandling;
 
 namespace OpenPDF.Tests
 {
@@ -35,7 +37,19 @@ namespace OpenPDF.Tests
         [TestMethod]
         public void ReadObject()
         {
-            var expected = new PdfObject(1, 0, PdfContent.CatalogObject);
+            var expected = new PdfObject(1, 0, new DictionaryPdfObjectContent(
+                new Dictionary<string, PdfObjectContent>
+                {
+                    {
+                        "Pages",
+                        new ReferencePdfObjectContent(
+                            new PdfReference(2, 0))
+                    },
+                    {
+                        "Type",
+                        new TypePdfObjectContent("Catalog")
+                    }
+                }));
             var reference = new PdfCrossReference(1, 91519, 0, true);
             using (var sut = new PdfReader(this.fileStream))
             {
