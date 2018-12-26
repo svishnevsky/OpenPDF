@@ -139,4 +139,12 @@
     &gt;&gt;
 &gt;&gt;</value>
   </data>
+  <data name="Stream" xml:space="preserve">
+    <value>&lt;&lt;
+/Length 4
+&gt;&gt;
+stream
+����
+endstream</value>
+  </data>
 </root>

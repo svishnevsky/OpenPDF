@@ -42,9 +42,19 @@ namespace OpenPDF.ContentHandling
 
         protected string GetValue(string content)
         {
-            int endIndex = Brackets.Keys.Any(content.StartsWith)
-                                ? GetComplexObjectEnd(content)
-                                : this.GetSimpleObjectEnd(content);
+            int endIndex;
+            if (Brackets.Keys.Any(content.StartsWith))
+            {
+                KeyValuePair<string, string> brackets = Brackets
+                    .Single(x => content.StartsWith(x.Key));
+                endIndex = GetComplexObjectEnd(
+                    content, brackets.Key, brackets.Value);
+            }
+            else
+            {
+                endIndex = this.GetSimpleObjectEnd(content);
+            }
+
             return content.Substring(0, endIndex);
         }
 
@@ -59,42 +69,39 @@ namespace OpenPDF.ContentHandling
             return endIndex;
         }
 
-        protected static int GetComplexObjectEnd(string content)
+        protected static int GetComplexObjectEnd(
+            string content,
+            string openBracket,
+            string closeBracket)
         {
-            KeyValuePair<string, string> brackets = Brackets
-                .Single(x => content.StartsWith(x.Key));
             int openned = 1;
             int nextOpenIndex = 0;
             int nextCloseIndex = 0;
             int dept = 0;
             do
             {
-                if (nextCloseIndex >= nextOpenIndex &&
-                        nextOpenIndex != -1)
+                if (CloseAfterOpen(nextOpenIndex, nextCloseIndex))
                 {
                     nextOpenIndex = content.IndexOf(
-                        brackets.Key, nextOpenIndex + brackets.Key.Length);
+                        openBracket, nextOpenIndex + openBracket.Length);
                     if (nextOpenIndex != -1)
                     {
-                        if (nextCloseIndex >= nextOpenIndex)
-                        {
-                            openned++;
-                        }
-                        else
-                        {
-                            dept++;
-                        }
+                        IncrementOpenned(
+                            ref openned, 
+                            nextOpenIndex, 
+                            nextCloseIndex, 
+                            ref dept);
                     }
                 }
 
-                if (nextOpenIndex > nextCloseIndex ||
-                    nextOpenIndex == -1)
+                if (OpenAfterClose(nextOpenIndex, nextCloseIndex))
                 {
                     nextCloseIndex = content.IndexOf(
-                        brackets.Value,
-                        nextCloseIndex + brackets.Value.Length);
+                        closeBracket,
+                        nextCloseIndex + closeBracket.Length);
                     openned--;
-                    if (nextCloseIndex >= nextOpenIndex && dept > 0)
+                    if (ShouldApplyDept(
+                        nextOpenIndex, nextCloseIndex, dept))
                     {
                         dept--;
                         openned++;
@@ -102,7 +109,43 @@ namespace OpenPDF.ContentHandling
                 }
             } while (openned > 0);
 
-            return nextCloseIndex + brackets.Value.Length;
+            return nextCloseIndex + closeBracket.Length;
+        }
+
+        private static void IncrementOpenned(
+            ref int openned, 
+            int nextOpenIndex, 
+            int nextCloseIndex, 
+            ref int dept)
+        {
+            if (nextCloseIndex >= nextOpenIndex)
+            {
+                openned++;
+            }
+            else
+            {
+                dept++;
+            }
+        }
+
+        private static bool ShouldApplyDept(
+            int nextOpenIndex, int nextCloseIndex, int dept)
+        {
+            return nextCloseIndex >= nextOpenIndex && dept > 0;
+        }
+
+        private static bool OpenAfterClose(
+            int nextOpenIndex, int nextCloseIndex)
+        {
+            return nextOpenIndex > nextCloseIndex ||
+                                nextOpenIndex == -1;
+        }
+
+        private static bool CloseAfterOpen(
+            int nextOpenIndex, int nextCloseIndex)
+        {
+            return nextCloseIndex >= nextOpenIndex &&
+                                    nextOpenIndex != -1;
         }
 
         protected string Unwrap(string content)
