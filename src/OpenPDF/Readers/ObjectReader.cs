@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using OpenPDF.ContentHandling;
 
 namespace OpenPDF.Readers
@@ -17,20 +18,20 @@ namespace OpenPDF.Readers
             this.handler = handler;
         }
 
-        public PdfObject Read(PdfCrossReference reference)
+        public async Task<PdfObject> Read(PdfCrossReference reference)
         {
             this.reader.Seek(reference.Seek + 1, SeekOrigin.Begin);
-            if (!IsExpectedObject(this.reader.ReadLine(), reference))
+            if (!IsExpectedObject(await this.reader.ReadLine(), reference))
             {
                 throw new InvalidReferenceException(reference);
             }
 
-            string currentLine = this.reader.ReadLine();
+            string currentLine = await this.reader.ReadLine();
             var content = new StringBuilder();
             while (currentLine != "endobj")
             {
                 content.AppendLine(currentLine);
-                currentLine = this.reader.ReadLine();
+                currentLine = await this.reader.ReadLine();
             }
 
             return new PdfObject(

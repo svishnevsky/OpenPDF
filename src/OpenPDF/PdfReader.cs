@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using OpenPDF.ContentHandling;
 using OpenPDF.Readers;
 
@@ -27,29 +28,31 @@ namespace OpenPDF
                 this.fileReader,
                 new DefaultContentHandler()));
 
-        public string ReadVersion()
+        public async Task<string> ReadVersion()
         {
             this.EnsureNotDisposed();
-            return new VersionReader().Read(this.fileReader);
+            return await new VersionReader().Read(this.fileReader);
         }
 
-        public PdfObject ReadObject(PdfCrossReference reference)
+        public async Task<PdfObject> ReadObject(PdfCrossReference reference)
         {
             this.EnsureNotDisposed();
-            return this.ObjectReader.Read(reference);
+            return await this.ObjectReader.Read(reference);
         }
 
-        public PdfTrailer ReadTrailer()
+        public async Task<PdfTrailer> ReadTrailer()
         {
             this.EnsureNotDisposed();
-            return this.pdfTrailer = new TrailerReader().Read(this.fileReader);
+            return this.pdfTrailer = await new TrailerReader()
+                .Read(this.fileReader);
         }
 
-        public PdfCrossReferenceTable ReadCrossReference()
+        public async Task<PdfCrossReferenceTable> ReadCrossReference()
         {
             this.EnsureNotDisposed();
-            PdfTrailer trailer = this.pdfTrailer ?? this.ReadTrailer();
-            return new CrossReferenceTableReader()
+            PdfTrailer trailer = this.pdfTrailer ?? 
+                (this.pdfTrailer = await this.ReadTrailer());
+            return await new CrossReferenceTableReader()
                 .Read(this.fileReader, trailer.XrefSeek);
         }
 

@@ -17,13 +17,13 @@ namespace OpenPDF.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ObjectDisposedException))]
-        public void ReadDisposedException()
+        public async Task ReadDisposedException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfDocumentReader(stream);
                 sut.Dispose();
-                sut.ReadDocument();
+                await sut.ReadDocument();
             }
         }
 

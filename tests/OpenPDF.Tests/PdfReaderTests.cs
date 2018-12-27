@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenPDF.ContentHandling;
 
@@ -23,19 +24,19 @@ namespace OpenPDF.Tests
         }
 
         [TestMethod]
-        public void ReadVersion()
+        public async Task ReadVersion()
         {
             const string Expected = "1.7";
             using (var sut = new PdfReader(this.fileStream))
             {
-                string result = sut.ReadVersion();
+                string result = await sut.ReadVersion();
 
                 Assert.AreEqual(Expected, result);
             }
         }
 
         [TestMethod]
-        public void ReadObject()
+        public async Task ReadObject()
         {
             var expected = new PdfObject(1, 0, new DictionaryPdfObjectContent(
                 new Dictionary<string, PdfObjectContent>
@@ -53,13 +54,13 @@ namespace OpenPDF.Tests
             var reference = new PdfCrossReference(1, 91519, 0, true);
             using (var sut = new PdfReader(this.fileStream))
             {
-                PdfObject result = sut.ReadObject(reference);
+                PdfObject result = await sut.ReadObject(reference);
                 Assert.AreEqual(expected, result);
             }
         }
 
         [TestMethod]
-        public void ReadTrailer()
+        public async Task ReadTrailer()
         {
             var expected = new PdfTrailer(
                 91785,
@@ -68,19 +69,20 @@ namespace OpenPDF.Tests
                 new PdfReference(20, 0));
             using (var sut = new PdfReader(this.fileStream))
             {
-                PdfTrailer result = sut.ReadTrailer();
+                PdfTrailer result = await sut.ReadTrailer();
 
                 Assert.AreEqual(expected, result);
             }
         }
 
         [TestMethod]
-        public void ReadCrossReference()
+        public async Task ReadCrossReference()
         {
             PdfCrossReferenceTable expected = GetReferencesTable();
             using (var sut = new PdfReader(this.fileStream))
             {
-                PdfCrossReferenceTable result = sut.ReadCrossReference();
+                PdfCrossReferenceTable result = 
+                    await sut.ReadCrossReference();
 
                 Assert.AreEqual(expected, result);
             }

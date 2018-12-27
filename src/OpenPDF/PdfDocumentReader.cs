@@ -14,11 +14,11 @@ namespace OpenPDF
             this.reader = new PdfReader(stream);
         }
 
-        public Task<PdfDocument> ReadDocument()
+        public async Task<PdfDocument> ReadDocument()
         {
             this.EnsureNotDisposed();
-            return Task.FromResult(
-                new PdfDocument(this.reader.ReadVersion()));
+            string version = await this.reader.ReadVersion();
+            return new PdfDocument(version);
         }
 
         public void Dispose()
