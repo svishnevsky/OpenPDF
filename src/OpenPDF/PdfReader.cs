@@ -9,7 +9,7 @@ namespace OpenPDF
     {
         private PdfTrailer pdfTrailer;
         private ObjectReader objectReader;
-        private readonly FileStreamReader reader;
+        private readonly FileStreamReader fileReader;
         private bool disposed = false;
 
         public PdfReader(Stream stream)
@@ -19,18 +19,18 @@ namespace OpenPDF
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            this.reader = new FileStreamReader(stream);
+            this.fileReader = new FileStreamReader(stream);
         }
 
         internal ObjectReader ObjectReader => this.objectReader 
             ?? (this.objectReader = new ObjectReader(
-                this.reader,
+                this.fileReader,
                 new DefaultContentHandler()));
 
         public string ReadVersion()
         {
             this.EnsureNotDisposed();
-            return new VersionReader().Read(this.reader);
+            return new VersionReader().Read(this.fileReader);
         }
 
         public PdfObject ReadObject(PdfCrossReference reference)
@@ -42,7 +42,7 @@ namespace OpenPDF
         public PdfTrailer ReadTrailer()
         {
             this.EnsureNotDisposed();
-            return this.pdfTrailer = new TrailerReader().Read(this.reader);
+            return this.pdfTrailer = new TrailerReader().Read(this.fileReader);
         }
 
         public PdfCrossReferenceTable ReadCrossReference()
@@ -50,7 +50,7 @@ namespace OpenPDF
             this.EnsureNotDisposed();
             PdfTrailer trailer = this.pdfTrailer ?? this.ReadTrailer();
             return new CrossReferenceTableReader()
-                .Read(this.reader, trailer.XrefSeek);
+                .Read(this.fileReader, trailer.XrefSeek);
         }
 
         public void Dispose()
@@ -63,7 +63,7 @@ namespace OpenPDF
         {
             if (disposing && !this.disposed)
             {
-                this.reader.Dispose();
+                this.fileReader.Dispose();
                 this.disposed = true;
             }
         }
@@ -72,7 +72,7 @@ namespace OpenPDF
         {
             if (this.disposed)
             {
-                throw new ObjectDisposedException(nameof(this.reader));
+                throw new ObjectDisposedException(nameof(this.fileReader));
             }
         }
     }
