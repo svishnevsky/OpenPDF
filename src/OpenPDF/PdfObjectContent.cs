@@ -16,7 +16,7 @@ namespace OpenPDF
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return 1779235439;
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenPDF.ContentHandling
 {
     public sealed class DictionaryPdfObjectContent :
-        TypedPdfObjectContent<Dictionary<string, PdfObjectContent>>
+        TypedPdfObjectContent<Dictionary<string, PdfObjectContent>>,
+        IEquatable<DictionaryPdfObjectContent>
     {
         public DictionaryPdfObjectContent(
             Dictionary<string, PdfObjectContent> value) 

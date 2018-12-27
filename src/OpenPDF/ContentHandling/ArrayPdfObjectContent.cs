@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenPDF.ContentHandling
 {
-    public sealed class ArrayPdfObjectContent
-        : TypedPdfObjectContent<PdfObjectContent[]>
+    public sealed class ArrayPdfObjectContent : 
+        TypedPdfObjectContent<PdfObjectContent[]>,
+        IEquatable<ArrayPdfObjectContent>
     {
         public ArrayPdfObjectContent(PdfObjectContent[] value)
             : base(value)

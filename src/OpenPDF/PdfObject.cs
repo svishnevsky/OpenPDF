@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenPDF
 {
-    public class PdfObject : IEquatable<PdfObject>
+    public sealed class PdfObject : IEquatable<PdfObject>
     {
         public PdfObject(
             int number,

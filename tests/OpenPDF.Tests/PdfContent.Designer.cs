@@ -93,5 +93,19 @@ namespace OpenPDF.Tests {
                 return ResourceManager.GetString("Dictionary", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;&lt;
+        ////Length 4
+        ///&gt;&gt;
+        ///stream
+        ///����
+        ///endstream.
+        /// </summary>
+        internal static string Stream {
+            get {
+                return ResourceManager.GetString("Stream", resourceCulture);
+            }
+        }
     }
 }
