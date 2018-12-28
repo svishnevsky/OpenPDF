@@ -23,10 +23,11 @@
                             null);
                     chain = new NullContentHandler(
                         new BoolContentHandler(
-                            new StringContentHandler(
-                                new TypeContentHandler(
-                                    new ReferenceContentHandler(
-                                        dictionaryHandler)))));
+                            new DateContentHandler(
+                                new StringContentHandler(
+                                    new TypeContentHandler(
+                                        new ReferenceContentHandler(
+                                            dictionaryHandler))))));
                     dictionaryHandler.PropHandler = chain;
                     arrayHandler.PropHandler = chain;
                 }

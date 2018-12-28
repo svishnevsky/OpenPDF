@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace OpenPDF.ContentHandling
 {
-    public sealed class DictionaryPdfObjectContent :
+    public class DictionaryPdfObjectContent :
         TypedPdfObjectContent<Dictionary<string, PdfObjectContent>>,
         IEquatable<DictionaryPdfObjectContent>
     {
         public DictionaryPdfObjectContent(
-            Dictionary<string, PdfObjectContent> value) 
+            Dictionary<string, PdfObjectContent> value)
             : base(value)
         {
         }
@@ -17,6 +17,11 @@ namespace OpenPDF.ContentHandling
         public override bool Equals(object obj)
         {
             return this.Equals(obj as DictionaryPdfObjectContent);
+        }
+
+        public override bool Equals(PdfObjectContent other)
+        {
+            return this.Equals(other as DictionaryPdfObjectContent);
         }
 
         public bool Equals(DictionaryPdfObjectContent other)
@@ -30,6 +35,16 @@ namespace OpenPDF.ContentHandling
             return -600369533 +
                    EqualityComparer<Dictionary<string, PdfObjectContent>>
                        .Default.GetHashCode(this.Value);
+        }
+
+        public PdfObjectContent this[string key]
+        {
+            get
+            {
+                return this.Value.ContainsKey(key)
+                    ? this.Value[key]
+                    : null;
+            }
         }
     }
 }

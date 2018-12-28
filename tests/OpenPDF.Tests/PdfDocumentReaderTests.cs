@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenPDF.ContentHandling;
 
 namespace OpenPDF.Tests
 {
@@ -34,8 +36,23 @@ namespace OpenPDF.Tests
                 new FileStream("example.pdf", FileMode.Open)))
             {
                 PdfDocument document = await sut.ReadDocument();
-                Assert.AreEqual("1.7", document.Version);
+                Assert.AreEqual(GetExpected(), document);
             }
+        }
+
+        private static PdfDocument GetExpected()
+        {
+            return new PdfDocument(
+                "1.7",
+                new PdfInfo(new DictionaryPdfObjectContent(
+                    new Dictionary<string, PdfObjectContent>
+                    {
+                        { "Author", new StringPdfObjectContent("s.vishnevsky") },
+                        { "CreationDate", new DatePdfObjectContent(new DateTime(2018, 12, 4, 13, 53, 21)) },
+                        { "ModDate", new DatePdfObjectContent(new DateTime(2018, 12, 4, 13, 53, 21)) },
+                        { "Producer", new StringPdfObjectContent("Microsoft: Print To PDF") },
+                        { "Title", new StringPdfObjectContent("svishnevsky/OpenPDF: .Net Core PDF reading library") }
+                    })));
         }
     }
 }

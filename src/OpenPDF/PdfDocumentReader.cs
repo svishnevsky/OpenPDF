@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using OpenPDF.ContentHandling;
 
 namespace OpenPDF
 {
@@ -18,7 +19,14 @@ namespace OpenPDF
         {
             this.EnsureNotDisposed();
             string version = await this.reader.ReadVersion();
-            return new PdfDocument(version);
+            PdfTrailer trailer = await this.reader.ReadTrailer();
+            PdfCrossReferenceTable referenceTable = 
+                await this.reader.ReadCrossReference();
+            PdfCrossReference infoReference = referenceTable[trailer.Info];
+            PdfObject infoObj = await this.reader.ReadObject(infoReference);
+            return new PdfDocument(
+                version, 
+                new PdfInfo(infoObj.Content as DictionaryPdfObjectContent));
         }
 
         public void Dispose()

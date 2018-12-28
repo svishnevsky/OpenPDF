@@ -23,12 +23,6 @@ namespace OpenPDF.ContentHandling
             return this.Equals(other as ArrayPdfObjectContent);
         }
 
-        public override bool Equals(
-            TypedPdfObjectContent<PdfObjectContent[]> other)
-        {
-            return this.Equals(other as ArrayPdfObjectContent);
-        }
-
         public bool Equals(ArrayPdfObjectContent other)
         {
             return other != null &&
