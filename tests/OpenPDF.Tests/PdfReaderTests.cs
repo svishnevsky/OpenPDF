@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenPDF.ContentHandling;
+using OpenPDF.Content;
 
 namespace OpenPDF.Tests
 {
