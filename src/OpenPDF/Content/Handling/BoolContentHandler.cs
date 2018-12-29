@@ -2,7 +2,7 @@
 {
     public class BoolContentHandler : ObjectContentHandler
     {
-        public BoolContentHandler(ObjectContentHandler successor) 
+        public BoolContentHandler(IObjectContentHandler successor) 
             : base(successor)
         {
         }

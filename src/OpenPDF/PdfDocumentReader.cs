@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using OpenPDF.Content;
@@ -20,13 +21,42 @@ namespace OpenPDF
             this.EnsureNotDisposed();
             string version = await this.reader.ReadVersion();
             PdfTrailer trailer = await this.reader.ReadTrailer();
-            PdfCrossReferenceTable referenceTable = 
+            PdfCrossReferenceTable referenceTable =
                 await this.reader.ReadCrossReference();
+            return new PdfDocument(
+                version,
+                await this.GetInfo(trailer, referenceTable),
+                await this.GetPages(trailer, referenceTable));
+        }
+
+        private async Task<List<PagePdfObjectContent>> GetPages(PdfTrailer trailer, PdfCrossReferenceTable referenceTable)
+        {
+            PdfCrossReference catalogReference = referenceTable[trailer.Root];
+            PdfObject catalogObject =
+                await this.reader.ReadObject(catalogReference);
+            var catalog = (CatalogPdfObjectContent)catalogObject.Content;
+            PdfCrossReference pagesReference =
+                referenceTable[catalog.Pages];
+            PdfObject pagesTree = await this.reader.ReadObject(
+                pagesReference);
+            var pages = new List<PagePdfObjectContent>();
+            foreach (PdfReference pageReference in
+                ((PagesPdfObjectContent)pagesTree.Content).Kids)
+            {
+                PdfObject page = await this.reader.ReadObject(
+                    referenceTable[pageReference]);
+                pages.Add((PagePdfObjectContent)page.Content);
+            }
+
+            return pages;
+        }
+
+        private async Task<PdfInfo> GetInfo(PdfTrailer trailer, PdfCrossReferenceTable referenceTable)
+        {
             PdfCrossReference infoReference = referenceTable[trailer.Info];
             PdfObject infoObj = await this.reader.ReadObject(infoReference);
-            return new PdfDocument(
-                version, 
-                new PdfInfo(infoObj.Content as DictionaryPdfObjectContent));
+            var pdfInfo = new PdfInfo(infoObj.Content as DictionaryPdfObjectContent);
+            return pdfInfo;
         }
 
         public void Dispose()

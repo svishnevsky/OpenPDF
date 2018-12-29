@@ -4,17 +4,17 @@ namespace OpenPDF.Content.Handling
 {
     public class ReferenceContentHandler : ObjectContentHandler
     {
-        private static readonly Regex referenceFormat =
+        internal static readonly Regex ReferenceFormat =
             new Regex(@"^\d+ \d+ R$");
 
-        public ReferenceContentHandler(ObjectContentHandler successor)
+        public ReferenceContentHandler(IObjectContentHandler successor)
             : base(successor)
         {
         }
 
         protected override bool IsContentSutable(string content)
         {
-            return referenceFormat.IsMatch(content);
+            return ReferenceFormat.IsMatch(content);
         }
 
         protected override PdfObjectContent Parse(string content)

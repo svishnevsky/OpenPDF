@@ -2,7 +2,7 @@
 {
     public class TypeContentHandler : ObjectContentHandler
     {
-        public TypeContentHandler(ObjectContentHandler successor) 
+        public TypeContentHandler(IObjectContentHandler successor) 
             : base(successor)
         {
         }

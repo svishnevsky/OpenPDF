@@ -17,7 +17,9 @@ namespace OpenPDF.Tests.Content.Handling
         public void HandleNonDictioinary(string input)
         {
             var sut = new DictionaryContentHandler(
-                null, new DefaultContentHandler());
+                null,
+                new DefaultContentHandler(),
+                new DictionaryPdfContentFactory());
 
             PdfObjectContent result = sut.Handle(input);
 
@@ -30,7 +32,8 @@ namespace OpenPDF.Tests.Content.Handling
             DictionaryPdfObjectContent expected = GetExpectedDictionary();
             var sut = new DictionaryContentHandler(
                 null,
-                new DefaultContentHandler());
+                new DefaultContentHandler(),
+                new DictionaryPdfContentFactory());
 
             PdfObjectContent result = sut.Handle(
                 PdfContent.Dictionary);
@@ -56,12 +59,12 @@ namespace OpenPDF.Tests.Content.Handling
                     },
                     {
                         "Dict",
-                        GetExpectedInnerDIctionary()
+                        GetExpectedInnerDictionary()
                     }
                 });
         }
 
-        private static PdfObjectContent GetExpectedInnerDIctionary()
+        private static PdfObjectContent GetExpectedInnerDictionary()
         {
             return new DictionaryPdfObjectContent(
                 new Dictionary<string, PdfObjectContent>

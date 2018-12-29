@@ -5,8 +5,8 @@ namespace OpenPDF.Content.Handling
     public class ArrayContentHandler : ComplexContentBaseHandler
     {
         public ArrayContentHandler(
-            ObjectContentHandler successor,
-            ObjectContentHandler propHandler)
+            IObjectContentHandler successor,
+            IObjectContentHandler propHandler)
             : base(
                   successor,
                   propHandler,
@@ -28,6 +28,23 @@ namespace OpenPDF.Content.Handling
             }
 
             return new ArrayPdfObjectContent(items.ToArray());
+        }
+
+        protected override string GetValue(string content)
+        {
+            int rIndex = content.IndexOf(" R");
+            if (rIndex != -1)
+            {
+                string referenceCandidate = 
+                    content.Substring(0, rIndex + 2);
+                if (ReferenceContentHandler.ReferenceFormat.IsMatch(
+                    referenceCandidate))
+                {
+                    return referenceCandidate;
+                }
+            }
+
+            return base.GetValue(content);
         }
     }
 }

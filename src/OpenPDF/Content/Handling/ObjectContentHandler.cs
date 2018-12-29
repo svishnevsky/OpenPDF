@@ -1,10 +1,10 @@
 ﻿namespace OpenPDF.Content.Handling
 {
-    public abstract class ObjectContentHandler
+    public abstract class ObjectContentHandler : IObjectContentHandler
     {
-        protected readonly ObjectContentHandler successor;
+        protected readonly IObjectContentHandler successor;
 
-        protected ObjectContentHandler(ObjectContentHandler successor)
+        protected ObjectContentHandler(IObjectContentHandler successor)
         {
             this.successor = successor;
         }

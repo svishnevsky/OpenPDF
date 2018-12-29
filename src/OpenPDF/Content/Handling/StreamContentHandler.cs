@@ -2,7 +2,7 @@
 {
     public class StreamContentHandler : ObjectContentHandler
     {
-        public StreamContentHandler(ObjectContentHandler successor)
+        public StreamContentHandler(IObjectContentHandler successor)
             : base(successor)
         {
         }
@@ -18,7 +18,8 @@
             int streamIndex = content.IndexOf($"\n{PdfTags.StreamStart}");
             var dictionaryHandler = new DictionaryContentHandler(
                 null,
-                new DefaultContentHandler());
+                new DefaultContentHandler(),
+                new DictionaryPdfContentFactory());
             var props = (DictionaryPdfObjectContent)dictionaryHandler.Handle(
                     content.Substring(0, streamIndex).Trim());
             string streamContent = content.Substring(

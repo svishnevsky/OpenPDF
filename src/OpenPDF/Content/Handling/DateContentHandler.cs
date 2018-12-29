@@ -5,7 +5,7 @@ namespace OpenPDF.Content.Handling
 {
     public class DateContentHandler : ObjectContentHandler
     {
-        public DateContentHandler(ObjectContentHandler successor)
+        public DateContentHandler(IObjectContentHandler successor)
             : base(successor)
         {
         }

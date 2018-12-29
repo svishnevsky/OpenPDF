@@ -18,11 +18,11 @@ namespace OpenPDF.Content.Handling
         private readonly string endTag;
         private readonly string itemSeparator;
 
-        internal ObjectContentHandler PropHandler { get; set; }
+        internal IObjectContentHandler PropHandler { get; set; }
 
         protected ComplexContentBaseHandler(
-            ObjectContentHandler successor,
-            ObjectContentHandler propHandler,
+            IObjectContentHandler successor,
+            IObjectContentHandler propHandler,
             string startTag,
             string endTag,
             string itemSeparator)
@@ -40,7 +40,7 @@ namespace OpenPDF.Content.Handling
                 content.EndsWith(this.endTag);
         }
 
-        protected string GetValue(string content)
+        protected virtual string GetValue(string content)
         {
             int endIndex;
             if (Brackets.Keys.Any(content.StartsWith))

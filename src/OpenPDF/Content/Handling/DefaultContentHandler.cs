@@ -2,13 +2,13 @@
 {
     public class DefaultContentHandler : ObjectContentHandler
     {
-        private static ObjectContentHandler chain;
+        private static IObjectContentHandler chain;
 
         public DefaultContentHandler() : base(Chain)
         {
         }
 
-        private static ObjectContentHandler Chain
+        private static IObjectContentHandler Chain
         {
             get
             {
@@ -20,7 +20,8 @@
                             null);
                     var dictionaryHandler = new DictionaryContentHandler(
                             arrayHandler,
-                            null);
+                            null,
+                            new DictionaryPdfContentFactory());
                     chain = new NullContentHandler(
                         new BoolContentHandler(
                             new DateContentHandler(

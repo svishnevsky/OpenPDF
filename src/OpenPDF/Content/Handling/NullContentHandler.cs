@@ -2,7 +2,7 @@
 {
     public class NullContentHandler : ObjectContentHandler
     {
-        public NullContentHandler(ObjectContentHandler successor) 
+        public NullContentHandler(IObjectContentHandler successor) 
             : base(successor)
         {
         }

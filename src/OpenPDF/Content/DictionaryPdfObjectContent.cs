@@ -5,11 +5,11 @@ using System.Linq;
 namespace OpenPDF.Content
 {
     public class DictionaryPdfObjectContent :
-        TypedPdfObjectContent<Dictionary<string, PdfObjectContent>>,
+        TypedPdfObjectContent<IDictionary<string, PdfObjectContent>>,
         IEquatable<DictionaryPdfObjectContent>
     {
         public DictionaryPdfObjectContent(
-            Dictionary<string, PdfObjectContent> value)
+            IDictionary<string, PdfObjectContent> value)
             : base(value)
         {
         }
@@ -33,7 +33,7 @@ namespace OpenPDF.Content
         public override int GetHashCode()
         {
             return -600369533 +
-                   EqualityComparer<Dictionary<string, PdfObjectContent>>
+                   EqualityComparer<IDictionary<string, PdfObjectContent>>
                        .Default.GetHashCode(this.Value);
         }
 

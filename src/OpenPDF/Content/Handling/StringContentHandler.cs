@@ -2,7 +2,7 @@
 {
     public class StringContentHandler : ObjectContentHandler
     {
-        public StringContentHandler(ObjectContentHandler successor)
+        public StringContentHandler(IObjectContentHandler successor)
             : base(successor)
         {
         }

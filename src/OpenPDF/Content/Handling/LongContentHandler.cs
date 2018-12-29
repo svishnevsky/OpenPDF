@@ -4,7 +4,7 @@ namespace OpenPDF.Content.Handling
 {
     public class LongContentHandler : ObjectContentHandler
     {
-        public LongContentHandler(ObjectContentHandler successor)
+        public LongContentHandler(IObjectContentHandler successor)
             : base(successor)
         {
         }

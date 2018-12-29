@@ -2,7 +2,7 @@
 {
     public class FloatContentHandler : ObjectContentHandler
     {
-        public FloatContentHandler(ObjectContentHandler successor)
+        public FloatContentHandler(IObjectContentHandler successor)
             : base(successor)
         {
         }

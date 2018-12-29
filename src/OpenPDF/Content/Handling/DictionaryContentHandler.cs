@@ -4,9 +4,12 @@ namespace OpenPDF.Content.Handling
 {
     public class DictionaryContentHandler : ComplexContentBaseHandler
     {
+        private readonly IDictionaryPdfContentFactory factory;
+
         public DictionaryContentHandler(
-            ObjectContentHandler successor,
-            ObjectContentHandler propHandler)
+            IObjectContentHandler successor,
+            IObjectContentHandler propHandler,
+            IDictionaryPdfContentFactory factory)
             : base(
                   successor,
                   propHandler,
@@ -14,6 +17,7 @@ namespace OpenPDF.Content.Handling
                   PdfTags.DictionaryEnd,
                   "/")
         {
+            this.factory = factory;
         }
 
         protected override PdfObjectContent Parse(string content)
@@ -29,7 +33,7 @@ namespace OpenPDF.Content.Handling
                 props.Add(prop, this.PropHandler.Handle(value.Trim()));
             }
 
-            return new DictionaryPdfObjectContent(props);
+            return this.factory.Create(props);
         }
     }
 }
