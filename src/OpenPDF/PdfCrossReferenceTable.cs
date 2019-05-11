@@ -36,5 +36,13 @@ namespace OpenPDF
                 EqualityComparer<IDictionary<int, PdfCrossReference>>
                     .Default.GetHashCode(this.references);
         }
+
+        public PdfCrossReference this[PdfReference reference]
+        {
+            get
+            {
+                return this.references[reference.Number];
+            }
+        }
     }
 }

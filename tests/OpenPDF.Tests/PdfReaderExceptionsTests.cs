@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenPDF.Tests
 {
@@ -8,84 +9,85 @@ namespace OpenPDF.Tests
     public class PdfReaderExceptionsTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void StreamNullException()
         {
-            new PdfReader(null);
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new PdfReader(null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void InvalidStreamException()
+        public async Task InvalidStreamException()
         {
             using (var stream = new MemoryStream(
                 new byte[] { 34, 48, 37, 32, 32 }))
             {
                 using (var sut = new PdfReader(stream))
                 {
-                    sut.ReadVersion();
+                    await Assert.ThrowsExceptionAsync<InvalidDataException>(
+                        async () => await sut.ReadVersion());
                 }
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
-        public void ReadVersionDisposedException()
+        public async Task ReadVersionDisposedException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                sut.ReadVersion();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadVersion());
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
-        public void ReadObjectException()
+        public async Task ReadObjectException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                sut.ReadObject(null);
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadObject(null));
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
-        public void ReadTrailerException()
+        public async Task ReadTrailerException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                sut.ReadTrailer();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadTrailer());
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
-        public void ReadCrossReferenceException()
+        public async Task ReadCrossReferenceException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                sut.ReadCrossReference();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadCrossReference());
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidReferenceException))]
-        public void ReadObjectInvalidReference()
+        public async Task ReadObjectInvalidReference()
         {
             using (var fileStream =
                 new FileStream("example.pdf", FileMode.Open))
             {
                 using (var reader = new PdfReader(fileStream))
                 {
-                    reader.ReadObject(new PdfCrossReference(1, 845, 0, true));
+                    await Assert.ThrowsExceptionAsync<InvalidReferenceException>(
+                        async () => await reader.ReadObject(
+                            new PdfCrossReference(1, 845, 0, true)));
                 }
             }
         }

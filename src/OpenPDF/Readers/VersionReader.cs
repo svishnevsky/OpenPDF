@@ -1,13 +1,14 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace OpenPDF.Readers
 {
     internal class VersionReader
     {
-        public string Read(FileStreamReader reader)
+        public async Task<string> Read(FileStreamReader reader)
         {
             reader.SeekToStart();
-            string versionLine = reader.ReadLine();
+            string versionLine = await reader.ReadLine();
             if (!versionLine.StartsWith(PdfTags.VersionPrefix))
             {
                 throw new InvalidDataException(

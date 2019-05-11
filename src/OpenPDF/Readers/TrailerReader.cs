@@ -1,24 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenPDF.Readers
 {
     internal class TrailerReader
     {
-        public PdfTrailer Read(FileStreamReader reader)
+        public async Task<PdfTrailer> Read(FileStreamReader reader)
         {
             string currentLine = null;
             reader.SeekToEnd();
             while (currentLine != PdfTags.Eof)
             {
-                currentLine = reader.ReadLine(
+                currentLine = await reader.ReadLine(
                     ReadDirection.BottomToTop);
             }
 
-            currentLine = reader.ReadLine(ReadDirection.BottomToTop);
+            currentLine = await reader.ReadLine(ReadDirection.BottomToTop);
             long xrefSeek = long.Parse(currentLine);
             Dictionary<string, string> properties =
-                ReadProperties(reader);
+                await ReadProperties(reader);
 
             return new PdfTrailer(
                 xrefSeek,
@@ -27,17 +28,17 @@ namespace OpenPDF.Readers
                 PdfReference.Parse(properties["INFO"]));
         }
 
-        private static Dictionary<string, string> ReadProperties(
+        private static async Task<Dictionary<string, string>> ReadProperties(
             FileStreamReader reader)
         {
             string currentLine = null;
             while (currentLine != PdfTags.DictionaryEnd)
             {
-                currentLine = reader.ReadLine(
+                currentLine = await reader.ReadLine(
                     ReadDirection.BottomToTop);
             }
 
-            currentLine = reader.ReadLine(
+            currentLine = await reader.ReadLine(
                     ReadDirection.BottomToTop);
             var properties = new Dictionary<string, string>();
             while (currentLine != PdfTags.DictionaryStart)
@@ -49,7 +50,7 @@ namespace OpenPDF.Readers
                 properties.Add(
                     rawProp.Substring(0, spaceIndex).ToUpper(),
                     rawProp.Substring(spaceIndex + 1));
-                currentLine = reader.ReadLine(
+                currentLine = await reader.ReadLine(
                     ReadDirection.BottomToTop);
             }
 

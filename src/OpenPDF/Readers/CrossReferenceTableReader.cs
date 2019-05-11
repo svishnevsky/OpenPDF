@@ -1,21 +1,22 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace OpenPDF.Readers
 {
     internal class CrossReferenceTableReader
     {
-        public PdfCrossReferenceTable Read(
+        public async Task<PdfCrossReferenceTable> Read(
             FileStreamReader reader, long xrefSeek)
         {
             reader.Seek(xrefSeek, SeekOrigin.Begin);
-            reader.ReadLine();
-            string[] objectsRange = reader.ReadLine().Split(' ');
+            await reader.ReadLine();
+            string[] objectsRange = (await reader.ReadLine()).Split(' ');
             int startObject = int.Parse(objectsRange[0]);
             int objectCount = int.Parse(objectsRange[1]);
             var table = new PdfCrossReferenceTable();
             for (int i = startObject; i < startObject + objectCount; i++)
             {
-                string reference = reader.ReadLine();
+                string reference = await reader.ReadLine();
                 table.Add(new PdfCrossReference(
                     i,
                     long.Parse(reference.Substring(0, 10)),

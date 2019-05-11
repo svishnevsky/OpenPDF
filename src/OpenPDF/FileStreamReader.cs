@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenPDF
 {
@@ -20,22 +21,26 @@ namespace OpenPDF
                 ?? throw new ArgumentNullException(nameof(stream));
         }
 
-        public string ReadLine(ReadDirection direction = ReadDirection.TopToBottom)
+        public Task<string> ReadLine(
+            ReadDirection direction = ReadDirection.TopToBottom)
         {
-            if (direction == ReadDirection.TopToBottom)
+            return Task.Factory.StartNew(() =>
             {
-                var lineBuilder = new StringBuilder();
-                int current = 0;
-                while (!this.EndOfStream &&
-                    (current = this.stream.ReadByte()) != 10)
+                if (direction == ReadDirection.TopToBottom)
                 {
-                    lineBuilder.Append(Convert.ToChar(current));
+                    var lineBuilder = new StringBuilder();
+                    int current = 0;
+                    while (!this.EndOfStream &&
+                        (current = this.stream.ReadByte()) != 10)
+                    {
+                        lineBuilder.Append(Convert.ToChar(current));
+                    }
+
+                    return lineBuilder.ToString();
                 }
 
-                return lineBuilder.ToString();
-            }
-
-            return this.ReadLineBackward();
+                return this.ReadLineBackward();
+            });
         }
 
         public void Seek(long offset, SeekOrigin origin)

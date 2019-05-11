@@ -16,5 +16,7 @@
         public const string ArrayEnd = "]";
         public const string StreamStart = "stream";
         public const string StreamEnd = "endstream";
+        public const string DateStart = "(D:";
+        public const string DateEnd = "')";
     }
 }
