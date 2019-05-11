@@ -2,9 +2,14 @@
 {
     public class StreamContentHandler : ObjectContentHandler
     {
-        public StreamContentHandler(IObjectContentHandler successor)
+        private readonly DictionaryContentHandler dictionaryHandler;
+
+        public StreamContentHandler(
+            IObjectContentHandler successor,
+            DictionaryContentHandler dictionaryContentHandler)
             : base(successor)
         {
+            this.dictionaryHandler = dictionaryContentHandler;
         }
 
         protected override bool IsContentSutable(string content)
@@ -15,13 +20,9 @@
 
         protected override PdfObjectContent Parse(string content)
         {
-            int streamIndex = content.IndexOf($"\n{PdfTags.StreamStart}");
-            var dictionaryHandler = new DictionaryContentHandler(
-                null,
-                new DefaultContentHandler(),
-                new DictionaryPdfContentFactory());
-            var props = (DictionaryPdfObjectContent)dictionaryHandler.Handle(
-                    content.Substring(0, streamIndex).Trim());
+            int streamIndex = content.IndexOf($"\n{PdfTags.StreamStart}");;
+            var props = (DictionaryPdfObjectContent)this.dictionaryHandler
+                .Handle(content.Substring(0, streamIndex).Trim());
             string streamContent = content.Substring(
                     streamIndex + PdfTags.StreamStart.Length + 1).Trim();
             streamContent = streamContent.Substring(

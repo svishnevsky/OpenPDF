@@ -21,10 +21,10 @@ namespace OpenPDF.Tests
         [DataRow("3 7 R 0")]
         [DataRow("a 7 R")]
         [DataRow("3 z R")]
-        [ExpectedException(typeof(FormatException))]
         public void ParseInvalidFormat(string input)
         {
-            var result = PdfReference.Parse(input);
+            Assert.ThrowsException<FormatException>(
+                () => PdfReference.Parse(input));
         }
     }
 }

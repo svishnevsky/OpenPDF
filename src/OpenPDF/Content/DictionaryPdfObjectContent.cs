@@ -24,7 +24,7 @@ namespace OpenPDF.Content
             return this.Equals(other as DictionaryPdfObjectContent);
         }
 
-        public bool Equals(DictionaryPdfObjectContent other)
+        public virtual bool Equals(DictionaryPdfObjectContent other)
         {
             return other != null &&
                 this.Value.SequenceEqual(other.Value);

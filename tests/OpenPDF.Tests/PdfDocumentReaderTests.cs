@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenPDF.Content;
+using OpenPDF.Content.Handling;
 
 namespace OpenPDF.Tests
 {
@@ -11,41 +12,45 @@ namespace OpenPDF.Tests
     public class PdfDocumentReaderTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void StreamNullException()
         {
-            new PdfDocumentReader(null);
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new PdfDocumentReader(null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
         public async Task ReadDisposedException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfDocumentReader(stream);
                 sut.Dispose();
-                await sut.ReadDocument();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadDocument());
             }
         }
 
         [TestMethod]
         public async Task ReadDocument()
         {
-            using (var sut = new PdfDocumentReader(
-                new FileStream("example.pdf", FileMode.Open)))
+            using (var stream = new FileStream("example.pdf", FileMode.Open))
             {
-                PdfDocument document = await sut.ReadDocument();
-                Assert.AreEqual(GetExpected(), document);
+                PdfDocument expected = await GetExpected(stream);
+                using (var sut = new PdfDocumentReader(
+                    stream))
+                {
+                    PdfDocument document = await sut.ReadDocument();
+                    Assert.AreEqual(expected, document);
+                }
             }
         }
 
-        private static PdfDocument GetExpected()
+        private static async Task<PdfDocument> GetExpected(Stream stream)
         {
             return new PdfDocument(
                 "1.7",
                 GetExpectedPdfInfo(),
-                GetExpectedPages());
+                await GetExpectedPages(stream));
         }
 
         private static PdfInfo GetExpectedPdfInfo()
@@ -54,27 +59,29 @@ namespace OpenPDF.Tests
                 new Dictionary<string, PdfObjectContent>
                 {
                         { "Author", new StringPdfObjectContent("s.vishnevsky") },
-                        { "CreationDate", new DatePdfObjectContent(new DateTime(2018, 12, 4, 13, 53, 21)) },
-                        { "ModDate", new DatePdfObjectContent(new DateTime(2018, 12, 4, 13, 53, 21)) },
+                        { "CreationDate", new DatePdfObjectContent(new DateTime(2018, 12, 4, 10, 53, 21)) },
+                        { "ModDate", new DatePdfObjectContent(new DateTime(2018, 12, 4, 10, 53, 21)) },
                         { "Producer", new StringPdfObjectContent("Microsoft: Print To PDF") },
                         { "Title", new StringPdfObjectContent("svishnevsky/OpenPDF: .Net Core PDF reading library") }
                  }));
         }
 
-        private static PagePdfObjectContent[] GetExpectedPages()
+        private static async Task<PagePdfObjectContent[]> GetExpectedPages(
+            Stream stream)
         {
+            var reader = new PdfReader(stream);
+            var streamHandler = new StreamContentHandler(
+                null,
+                new DictionaryContentHandler(
+                    null,
+                    new DefaultContentHandler(),
+                    new DictionaryPdfContentFactory()));
             return new[] { new PagePdfObjectContent(
                     new Dictionary<string, PdfObjectContent>
                     {
                         {
                             "Contents",
-                            new ArrayPdfObjectContent(
-                                new PdfObjectContent[]
-                                {
-                                    new ReferencePdfObjectContent(new PdfReference(7, 0)),
-                                    new ReferencePdfObjectContent(new PdfReference(16, 0)),
-                                    new ReferencePdfObjectContent(new PdfReference(18, 0))
-                                })
+                            await GetPageContents(reader)
                         },
                         {
                             "CropBox",
@@ -110,6 +117,18 @@ namespace OpenPDF.Tests
                         { "Type", new TypePdfObjectContent("Page") }
                     })
                 };
+        }
+
+        private static async Task<ArrayPdfObjectContent> GetPageContents(
+            PdfReader reader)
+        {
+            return new ArrayPdfObjectContent(
+                new PdfObjectContent[]
+                {
+                    (await reader.ReadObject(new PdfCrossReference(7, 4795, 0, true))).Content,
+                    (await reader.ReadObject(new PdfCrossReference(16, 56756, 0, true))).Content,
+                    (await reader.ReadObject(new PdfCrossReference(18, 84644, 0, true))).Content,
+                });
         }
     }
 }

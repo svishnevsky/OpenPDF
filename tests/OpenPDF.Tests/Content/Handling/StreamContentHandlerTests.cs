@@ -15,7 +15,7 @@ namespace OpenPDF.Tests.Content.Handling
         [DataRow("<some string>>   endstream")]
         public void HandleNonStream(string input)
         {
-            var sut = new StreamContentHandler(null);
+            var sut = new StreamContentHandler(null, null);
 
             PdfObjectContent result = sut.Handle(input);
 
@@ -32,7 +32,11 @@ namespace OpenPDF.Tests.Content.Handling
                         { "Length", new LongPdfObjectContent(4) }
                     },
                     "����"));
-            var sut = new StreamContentHandler(null);
+            var dictionaryHandler = new DictionaryContentHandler(
+                null,
+                new DefaultContentHandler(),
+                new DictionaryPdfContentFactory());
+            var sut = new StreamContentHandler(null, dictionaryHandler);
 
             PdfObjectContent result = sut.Handle(
                 PdfContent.Stream);

@@ -28,7 +28,9 @@
                                 new StringContentHandler(
                                     new TypeContentHandler(
                                         new ReferenceContentHandler(
-                                            dictionaryHandler))))));
+                                            new StreamContentHandler(
+                                                dictionaryHandler,
+                                                dictionaryHandler)))))));
                     dictionaryHandler.PropHandler = chain;
                     arrayHandler.PropHandler = chain;
                 }

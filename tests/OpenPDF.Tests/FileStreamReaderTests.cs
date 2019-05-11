@@ -69,10 +69,10 @@ namespace OpenPDF.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NullStream()
         {
-            var sut = new FileStreamReader(null);
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new FileStreamReader(null));
         }
     }
 }

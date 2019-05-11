@@ -24,7 +24,10 @@ namespace OpenPDF.Content.Handling
                 PdfTags.DateStart.Length -
                 PdfTags.DateEnd.Length);
             return new DatePdfObjectContent(
-                DateTime.ParseExact(rawDate.Replace('\'', ':'), "yyyyMMddHHmmsszzz", CultureInfo.InvariantCulture));
+                DateTime.ParseExact(
+                    rawDate.Replace('\'', ':'), 
+                    "yyyyMMddHHmmsszzz", 
+                    CultureInfo.InvariantCulture).ToUniversalTime());
         }
     }
 }

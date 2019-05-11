@@ -18,7 +18,9 @@ namespace OpenPDF
         }
 
         public string Version { get; }
+
         public PdfInfo Info { get; }
+
         public IReadOnlyCollection<PagePdfObjectContent> Pages { get; }
 
         public override bool Equals(object obj)
@@ -26,7 +28,7 @@ namespace OpenPDF
             return this.Equals(obj as PdfDocument);
         }
 
-        public bool Equals(PdfDocument other)
+        public virtual bool Equals(PdfDocument other)
         {
             return other != null &&
                    this.Version == other.Version &&

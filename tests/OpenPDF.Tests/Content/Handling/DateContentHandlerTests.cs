@@ -26,7 +26,7 @@ namespace OpenPDF.Tests.Content.Handling
         public void HandleDateContent()
         {
             var expected = new DatePdfObjectContent(
-                new DateTime(2018, 12, 04, 13, 53, 21));
+                new DateTime(2018, 12, 04, 10, 53, 21, DateTimeKind.Utc));
             var sut = new DateContentHandler(null);
 
             PdfObjectContent result = sut.Handle(

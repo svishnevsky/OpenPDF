@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenPDF.Tests
 {
@@ -9,14 +9,13 @@ namespace OpenPDF.Tests
     public class PdfReaderExceptionsTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void StreamNullException()
         {
-            new PdfReader(null);
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new PdfReader(null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
         public async Task InvalidStreamException()
         {
             using (var stream = new MemoryStream(
@@ -24,61 +23,61 @@ namespace OpenPDF.Tests
             {
                 using (var sut = new PdfReader(stream))
                 {
-                    await sut.ReadVersion();
+                    await Assert.ThrowsExceptionAsync<InvalidDataException>(
+                        async () => await sut.ReadVersion());
                 }
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
         public async Task ReadVersionDisposedException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                await sut.ReadVersion();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadVersion());
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
         public async Task ReadObjectException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                await sut.ReadObject(null);
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadObject(null));
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
         public async Task ReadTrailerException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                await sut.ReadTrailer();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadTrailer());
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
         public async Task ReadCrossReferenceException()
         {
             using (var stream = new MemoryStream())
             {
                 var sut = new PdfReader(stream);
                 sut.Dispose();
-                await sut.ReadCrossReference();
+                await Assert.ThrowsExceptionAsync<ObjectDisposedException>(
+                    async () => await sut.ReadCrossReference());
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidReferenceException))]
         public async Task ReadObjectInvalidReference()
         {
             using (var fileStream =
@@ -86,8 +85,9 @@ namespace OpenPDF.Tests
             {
                 using (var reader = new PdfReader(fileStream))
                 {
-                    await reader.ReadObject(
-                        new PdfCrossReference(1, 845, 0, true));
+                    await Assert.ThrowsExceptionAsync<InvalidReferenceException>(
+                        async () => await reader.ReadObject(
+                            new PdfCrossReference(1, 845, 0, true)));
                 }
             }
         }

@@ -36,12 +36,15 @@ namespace OpenPDF
         public static PdfReference Parse(string reference)
         {
             string[] parts = reference.Split(' ');
-            if (parts.Length != 3 || parts[2] != "R")
+            if (parts.Length != 3 ||
+                parts[2] != "R"
+                || !int.TryParse(parts[0], out int number)
+                || !int.TryParse(parts[1], out int generation))
             {
                 throw new FormatException(ErrorMessages.InvalidReferenceFormat);
             }
 
-            return new PdfReference(int.Parse(parts[0]), int.Parse(parts[1]));
+            return new PdfReference(number, generation);
         }
     }
 }
